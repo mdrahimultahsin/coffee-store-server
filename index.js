@@ -43,6 +43,23 @@ async function run() {
       res.send(result);
     });
 
+    //Update data from DB
+    app.patch("/coffees/:id", async (req, res) => {
+      const id = req.params.id;
+      const newCoffeeData = req.body;
+      const options = {upsert: true};
+      const updateDoc = {
+        $set: newCoffeeData,
+      };
+      const filter = {_id: new ObjectId(id)};
+      const result = await coffeeCollection.updateOne(
+        filter,
+        updateDoc,
+        options
+      );
+      res.send(result);
+    });
+
     // Delete Data from DB
     app.delete("/coffees/:id", async (req, res) => {
       const id = req.params.id;
